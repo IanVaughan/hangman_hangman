@@ -9,4 +9,25 @@ defmodule GameTest do
     assert game.game_state == :init
     assert length(game.letters) > 0
   end
+
+  test "state isnt changed for won" do
+    for state <- [:won, :lost] do
+      game = Game.new_game() |> Map.put(:game_state, state)
+      assert { ^game, _} = Game.make_move(game, "x")
+    end
+  end
+
+  test "first occurrence" do
+    game = Game.new_game()
+    { game, _tally } = Game.make_move(game, "x")
+    assert game.game_state != :already_used
+  end
+
+  test "second occurrence" do
+    game = Game.new_game()
+    { game, _tally } = Game.make_move(game, "x")
+    assert game.game_state != :already_used
+    { game, _tally } = Game.make_move(game, "x")
+    assert game.game_state == :already_used
+  end
 end
