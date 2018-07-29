@@ -18,20 +18,20 @@ defmodule Hangman.Game do
 
   def make_move(game = %{ game_state: state}, _guess) when state in [:won, :lost] do
     game
-    |> return_with_tally
+    |> return_with_tally()
   end
 
   def make_move(game, guess) do
     accept_move(game, guess, MapSet.member?(game.used, guess))
-    |> return_with_tally
+    |> return_with_tally()
   end
 
   def tally(game) do
     %{
       game_state: game.game_state,
       turns_left: game.turns_left,
+      used: game.used |> MapSet.to_list |> Enum.sort,
       letters: game.letters |> reveal_guessed(game.used),
-      used: game.used
     }
   end
 
